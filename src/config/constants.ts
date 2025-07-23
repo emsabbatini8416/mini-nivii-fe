@@ -21,9 +21,12 @@ export const MESSAGES: Messages = {
   ERRORS: {
     EMPTY_QUESTION: 'Please enter a question',
     API_ERROR: 'Could not process question. Please try again.',
-    NETWORK_ERROR: 'Network error. Please check your connection.'
+    NETWORK_ERROR: 'Network error. Please check your connection.',
+    NO_DATA: 'No data received from the server. Please try a different question.',
+    NO_RESULTS: 'No results found for your query. Please try a different question.',
+    INVALID_FORMAT: 'Invalid data format received. Please try again.'
   },
   PLACEHOLDERS: {
-    SEARCH: 'Ask a question like: top-selling product in October'
+    SEARCH: 'Try: "top-selling product in October" (bar) | "distribution of sold products" (pie) | "evolution of total sales through time" (line)'
   }
 };

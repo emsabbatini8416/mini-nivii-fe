@@ -6,13 +6,21 @@ export interface ApiResponse<T = any> {
 }
 
 export interface ChartDataPoint {
-  name: string;
-  value: number;
-  color?: string;
+  [key: string]: any;
+}
+
+export type ChartType = 'bar' | 'line' | 'pie' | 'area';
+
+export interface ChartSuggestion {
+  chart_type: ChartType;
+  title: string;
+  description: string;
 }
 
 export interface QueryResponse {
-  data: ChartDataPoint[];
+  data: ChartDataPoint[] | any;
+  chartType?: ChartType; // Keep for backward compatibility
+  chart_suggestion?: ChartSuggestion;
   message?: string;
   query?: string;
 }
@@ -28,6 +36,7 @@ export interface SearchFormProps {
 
 export interface ChartDisplayProps {
   data: ChartDataPoint[] | null;
+  chartType?: ChartType;
 }
 
 export interface ErrorMessageProps {
@@ -42,6 +51,7 @@ export interface EnvDebugProps {
 // Hook Types
 export interface UseQueryResult {
   data: ChartDataPoint[] | null;
+  chartType: ChartType | null;
   loading: boolean;
   error: string | null;
   executeQuery: (question: string) => Promise<void>;
@@ -71,6 +81,9 @@ export interface Messages {
     EMPTY_QUESTION: string;
     API_ERROR: string;
     NETWORK_ERROR: string;
+    NO_DATA: string;
+    NO_RESULTS: string;
+    INVALID_FORMAT: string;
   };
   PLACEHOLDERS: {
     SEARCH: string;

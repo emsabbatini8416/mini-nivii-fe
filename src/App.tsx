@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Header, SearchForm, ChartDisplay, ErrorMessage } from '@/components';
+import { Header, SearchForm, ChartDisplay, ErrorMessage, ChartTypeSelector } from '@/components';
 import { useQuery } from '@/hooks/useQuery';
+import type { ChartType } from '@/types';
 
 const App: React.FC = () => {
   const [question, setQuestion] = useState<string>('');
-  const { data, loading, error, executeQuery, clearData } = useQuery();
+  const [manualChartType, setManualChartType] = useState<ChartType | null>(null);
+  const { data, chartType, loading, error, executeQuery, clearData } = useQuery();
 
   const handleSubmit = (): void => {
     executeQuery(question);
@@ -12,12 +14,20 @@ const App: React.FC = () => {
 
   const handleClear = (): void => {
     setQuestion('');
+    setManualChartType(null);
     clearData();
   };
 
   const handleErrorDismiss = (): void => {
     clearData();
   };
+
+  const handleChartTypeChange = (type: ChartType): void => {
+    setManualChartType(type);
+  };
+
+  // Use manual chart type if set, otherwise use auto-detected type
+  const effectiveChartType = manualChartType || chartType;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,7 +48,15 @@ const App: React.FC = () => {
             onDismiss={handleErrorDismiss}
           />
 
-          <ChartDisplay data={data} />
+          {data && (
+            <ChartTypeSelector
+              selectedType={effectiveChartType || 'bar'}
+              onTypeChange={handleChartTypeChange}
+              disabled={loading}
+            />
+          )}
+
+          <ChartDisplay data={data} chartType={effectiveChartType || undefined} />
         </div>
       </main>
 
